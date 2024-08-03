@@ -19,13 +19,24 @@ class CoursesRepo:
                 course = self.get_course_by_abbr(abbr)
                 courses.append(course)
 
-        return courses if courses.__len__() > 0 else None
+        return courses if len(courses) > 0 else None
 
     def get_course_by_abbr(self, search_abbr: str) -> Course:
         search_abbr = search_abbr.lower().replace(' ', '')
         for index, course in enumerate(self.courses):
             if course.abbr.lower().replace(' ', '') == search_abbr:
-                return self.courses[index]
+                return course
 
         return None
+
+    def get_course_with_index_by_abbr(self, search_abbr: str) -> tuple[int, Course]:
+        search_abbr = search_abbr.lower().replace(' ', '')
+        for index, course in enumerate(self.courses):
+            if course.abbr.lower().replace(' ', '') == search_abbr:
+                return index, course
+
+        return None
+
+    def get_course_by_index(self, index: int) -> Course:
+        return self.courses[index]
 

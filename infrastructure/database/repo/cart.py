@@ -27,7 +27,7 @@ class CartRepo(BaseRepo):
         result = await self.session.execute(insert_stmt)
 
         await self.session.commit()
-        return result.scalar_one()
+        return result.scalar_one_or_none()
 
     async def get_user_cart(self, user_id: int) -> List[int]:
         stmt = (

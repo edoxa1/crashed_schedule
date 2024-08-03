@@ -1,7 +1,7 @@
 from infrastructure.models.section import Section
 
 
-class BaseType:
+class SectionType:
     _type = ''
 
     def __init__(self, abbr: str):
@@ -15,7 +15,7 @@ class BaseType:
         raise 'Override!'
 
     def sort_sections(self):
-        self.sections.sort(key=lambda section: section.course_type)
+        self.sections.sort(key=lambda section: section.name)
 
     def get_type(self) -> str:
         return self._type
@@ -23,58 +23,64 @@ class BaseType:
     def replace_type_by_course_type(self, course_type: str):
         self._type = course_type
 
+    def __call__(self):
+        return self.sections
 
-class Laboratory(BaseType):
+    def __iter__(self):
+        yield from self.sections
+
+
+class Laboratory(SectionType):
     _type = 'Laboratory'
 
     def __init__(self, abbr: str):
         super().__init__(abbr)
 
     def check_section(self, other: Section):
-        return 'Lb' in other.course_type
+        return 'Lb' in other.name
 
 
-class Lecture(BaseType):
+class Lecture(SectionType):
     _type = 'Lecture'
 
     def __init__(self, abbr: str):
         super().__init__(abbr)
 
     def check_section(self, other: Section):
-        return 'L' == other.course_type[-1]
+        return 'L' == other.name[-1]
 
 
-class Recitation(BaseType):
+class Recitation(SectionType):
     _type = 'Recitation'
 
     def __init__(self, abbr: str):
         super().__init__(abbr)
 
     def check_section(self, other: Section):
-        return 'R' == other.course_type[-1]
+        return 'R' == other.name[-1]
 
 
-class Seminar(BaseType):
+class Seminar(SectionType):
     _type = 'Seminar'
 
     def __init__(self, abbr: str):
         super().__init__(abbr)
 
     def check_section(self, other: Section):
-        return 'S' == other.course_type[-1]
+        return 'S' == other.name[-1]
 
 
-class Tutorial(BaseType):
+class Tutorial(SectionType):
     _type = 'Tutorial'
 
     def __init__(self, abbr: str):
         super().__init__(abbr)
 
     def check_section(self, other: Section):
-        return 'T' == other.course_type[-1]
+        return 'T' == other.name[-1]
 
 
-class Other(BaseType):
+class Other(SectionType):
     def __init__(self, abbr: str):
         super().__init__(abbr)
 

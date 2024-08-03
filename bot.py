@@ -11,6 +11,7 @@ from tgbot.handlers import routers_list
 from tgbot.middlewares.config import ConfigMiddleware
 from tgbot.middlewares.database import DatabaseMiddleware
 from tgbot.middlewares.courses import ParsedCoursesMiddleware
+from tgbot.middlewares.storage import RedisMiddleware
 # from tgbot.middlewares.throttling import ThrottlingMiddleware
 from tgbot.services import broadcaster
 
@@ -25,6 +26,7 @@ async def on_startup(bot: Bot, admin_ids: list[int]):
 def register_global_middlewares(dp: Dispatcher, config: Config, courses_list, session_pool=None, storage=None):
     middleware_types = [
         ConfigMiddleware(config),
+        RedisMiddleware(storage),
         DatabaseMiddleware(session_pool),
         ParsedCoursesMiddleware(courses_list)
         # ThrottlingMiddleware(storage)
@@ -51,6 +53,9 @@ def get_storage(config):
     if config.tg_bot.use_redis:
         return RedisStorage.from_url(
             config.redis.dsn(),
+            connection_kwargs={
+                "decode_responses": True
+            },
             key_builder=DefaultKeyBuilder(with_bot_id=True, with_destiny=True),
         )
     else:

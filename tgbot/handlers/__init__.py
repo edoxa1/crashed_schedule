@@ -1,11 +1,15 @@
 """Import all routers and add them to routers_list."""
 from .admin import admin_router
+from .start import start_router
 from .user import user_router
+from .cart import cart_router
 
 
 routers_list = [
     admin_router,
-    user_router
+    start_router,
+    cart_router,
+    user_router,
 ]
 
 __all__ = [

@@ -5,7 +5,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 from infrastructure.models.course import Course
 from infrastructure.models.section import Section
-from infrastructure.models.types import BaseType
+from infrastructure.models.types import SectionType
 
 
 def select_course_keyboard(courses: List[Course]) -> ReplyKeyboardMarkup:
@@ -26,10 +26,10 @@ def select_course_type(course: Course) -> ReplyKeyboardMarkup:
     return keyboard
 
 
-def select_section_keyboard(stype: BaseType) -> ReplyKeyboardMarkup:
+def select_section_keyboard(stype: SectionType) -> ReplyKeyboardMarkup:
     buttons = []
     for section in stype.sections:
-        buttons.append(KeyboardButton(text=section.course_type))
+        buttons.append(KeyboardButton(text=section.name))
 
     keyboard = ReplyKeyboardMarkup(keyboard=[buttons], one_time_keyboard=True, resize_keyboard=True)
     return keyboard
